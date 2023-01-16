@@ -18,6 +18,8 @@ const CELL_DEFAULT = {
 }
 const ERROR_LIMIT = 5
 
+const TAGS_TO_IGNORE_FORMAT = ['header', 'list', 'code']
+
 class TableCellLine extends Block {
   static create(value) {
     const node = super.create(value)
@@ -63,16 +65,13 @@ class TableCellLine extends Block {
       } else {
         this.domNode.removeAttribute('data-cell-bg')
       }
-    } else if (name === 'header') {
+    } else if (TAGS_TO_IGNORE_FORMAT.includes(name)) {
+      // Cancel formatting to avoid table breaking
+      // super.format(name, value)
+    } else if (name === 'table-cell-line') {
       if (!value) return;
-      const { row, cell, rowspan, colspan } = TableCellLine.formats(this.domNode)
-      super.format(name, {
-        value,
-        row,
-        cell,
-        rowspan,
-        colspan
-      })
+
+      super.format(name, value)
     } else {
       super.format(name, value)
     }

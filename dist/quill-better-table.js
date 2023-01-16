@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "11035bd86526006ad5bd";
+/******/ 	var hotCurrentHash = "d26264617717028a1b6e";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1228,6 +1228,7 @@ function computeCellsNumber(CellsInFirstRow) {
 const Block = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import("blots/block");
 class header_Header extends Block {
   static create(value) {
+    console.log('@@createHeader', value);
     if (typeof value === 'string') {
       value = {
         value
@@ -1253,6 +1254,7 @@ class header_Header extends Block {
     }, formats);
   }
   format(name, value) {
+    console.log('@@formatheader');
     const {
       row,
       cell,
@@ -1285,6 +1287,7 @@ class header_Header extends Block {
     }
   }
   optimize(context) {
+    console.log('@@optimize', context);
     const {
       row,
       rowspan,
@@ -1338,6 +1341,7 @@ const CELL_DEFAULT = {
   colspan: 1
 };
 const ERROR_LIMIT = 5;
+const TAGS_TO_IGNORE_FORMAT = ['header', 'list', 'code'];
 class TableCellLine extends table_Block {
   static create(value) {
     const node = super.create(value);
@@ -1375,21 +1379,12 @@ class TableCellLine extends table_Block {
       } else {
         this.domNode.removeAttribute('data-cell-bg');
       }
-    } else if (name === 'header') {
+    } else if (TAGS_TO_IGNORE_FORMAT.includes(name)) {
+      // Cancel formatting to avoid table breaking
+      // super.format(name, value)
+    } else if (name === 'table-cell-line') {
       if (!value) return;
-      const {
-        row,
-        cell,
-        rowspan,
-        colspan
-      } = TableCellLine.formats(this.domNode);
-      super.format(name, {
-        value,
-        row,
-        cell,
-        rowspan,
-        colspan
-      });
+      super.format(name, value);
     } else {
       super.format(name, value);
     }

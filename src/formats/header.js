@@ -10,6 +10,7 @@ const Block = Quill.import("blots/block")
 
 class Header extends Block {
   static create (value) {
+    console.log('@@createHeader', value)
     if (typeof value === 'string') {
       value = { value }
     }
@@ -40,6 +41,7 @@ class Header extends Block {
   }
 
   format (name, value) {
+    console.log('@@formatheader')
     const { row, cell, rowspan, colspan } = Header.formats(this.domNode)
     if (name === Header.blotName) {
       if (value) {
@@ -65,6 +67,7 @@ class Header extends Block {
   }
 
   optimize(context) {
+    console.log('@@optimize', context)
     const { row, rowspan, colspan } = Header.formats(this.domNode)
 
     if (
