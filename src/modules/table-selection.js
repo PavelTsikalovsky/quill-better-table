@@ -17,6 +17,7 @@ export default class TableSelection {
     this.dragging = false
     this.selectingHandler = this.mouseDownHandler.bind(this)
     this.clearSelectionHandler  = this.clearSelection.bind(this)
+    this.refreshHelpLinesPosition  = this.refreshHelpLinesPosition.bind(this)
 
     this.helpLinesInitial()
     this.quill.root.addEventListener('mousedown',
@@ -39,6 +40,10 @@ export default class TableSelection {
       })
       parent.appendChild(this[direction])
     })
+
+    if (this.quill.root === this.quill.scrollingContainer) {
+      this.quill.root.addEventListener('scroll', this.refreshHelpLinesPosition);
+    }
   }
 
   mouseDownHandler (e) {
@@ -189,6 +194,8 @@ export default class TableSelection {
     this.quill.root.removeEventListener('mousedown',
       this.selectingHandler,
     false)
+
+    this.quill.root.removeEventListener('scroll', this.refreshHelpLinesPosition)
 
     this.quill.off('text-change', this.clearSelectionHandler )
 

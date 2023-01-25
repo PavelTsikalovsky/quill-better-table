@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "d26264617717028a1b6e";
+/******/ 	var hotCurrentHash = "d67b89b40e2a934c14a1";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1072,6 +1072,7 @@ class table_column_tool_TableColumnTool {
     this.quill = quill;
     this.options = options;
     this.domNode = null;
+    this.handleScroll = this.handleScroll.bind(this);
     this.initColTool();
   }
   initColTool() {
@@ -1087,7 +1088,16 @@ class table_column_tool_TableColumnTool {
       width: `${tableViewRect.width}px`,
       height: `${COL_TOOL_HEIGHT}px`,
       left: `${tableViewRect.left - containerRect.left + parent.scrollLeft}px`,
-      top: `${tableViewRect.top - containerRect.top + parent.scrollTop - COL_TOOL_HEIGHT - 5}px`
+      top: `${tableViewRect.top - containerRect.top + parent.scrollTop + this.quill.root.scrollTop - COL_TOOL_HEIGHT - 5}px`,
+      'margin-top': `${-this.quill.root.scrollTop}px`
+    });
+    if (this.quill.root === this.quill.scrollingContainer) {
+      this.quill.root.addEventListener('scroll', this.handleScroll);
+    }
+  }
+  handleScroll() {
+    css(this.domNode, {
+      'margin-top': `${-this.quill.root.scrollTop}px`
     });
   }
   createToolCell() {
@@ -1132,6 +1142,7 @@ class table_column_tool_TableColumnTool {
     }
   }
   destroy() {
+    this.quill.root.removeEventListener('scroll', this.handleScroll);
     this.domNode.remove();
     return null;
   }
@@ -1228,7 +1239,6 @@ function computeCellsNumber(CellsInFirstRow) {
 const Block = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import("blots/block");
 class header_Header extends Block {
   static create(value) {
-    console.log('@@createHeader', value);
     if (typeof value === 'string') {
       value = {
         value
@@ -1254,7 +1264,6 @@ class header_Header extends Block {
     }, formats);
   }
   format(name, value) {
-    console.log('@@formatheader');
     const {
       row,
       cell,
@@ -1287,7 +1296,6 @@ class header_Header extends Block {
     }
   }
   optimize(context) {
-    console.log('@@optimize', context);
     const {
       row,
       rowspan,
@@ -2054,6 +2062,7 @@ class table_selection_TableSelection {
     this.dragging = false;
     this.selectingHandler = this.mouseDownHandler.bind(this);
     this.clearSelectionHandler = this.clearSelection.bind(this);
+    this.refreshHelpLinesPosition = this.refreshHelpLinesPosition.bind(this);
     this.helpLinesInitial();
     this.quill.root.addEventListener('mousedown', this.selectingHandler, false);
     this.quill.on('text-change', this.clearSelectionHandler);
@@ -2071,6 +2080,9 @@ class table_selection_TableSelection {
       });
       parent.appendChild(this[direction]);
     });
+    if (this.quill.root === this.quill.scrollingContainer) {
+      this.quill.root.addEventListener('scroll', this.refreshHelpLinesPosition);
+    }
   }
   mouseDownHandler(e) {
     if (e.button !== 0 || !e.target.closest(".quill-better-table")) return;
@@ -2188,6 +2200,7 @@ class table_selection_TableSelection {
       this[direction] = null;
     });
     this.quill.root.removeEventListener('mousedown', this.selectingHandler, false);
+    this.quill.root.removeEventListener('scroll', this.refreshHelpLinesPosition);
     this.quill.off('text-change', this.clearSelectionHandler);
     return null;
   }
@@ -3063,7 +3076,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1673874423583
+      // 1674655417700
       var cssReload = __webpack_require__(12)(module.i, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);

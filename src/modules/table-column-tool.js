@@ -15,6 +15,8 @@ export default class TableColumnTool {
     this.options = options
     this.domNode = null
 
+    this.handleScroll = this.handleScroll.bind(this)
+
     this.initColTool()
   }
 
@@ -32,7 +34,18 @@ export default class TableColumnTool {
       width: `${tableViewRect.width}px`,
       height: `${COL_TOOL_HEIGHT}px`,
       left: `${tableViewRect.left - containerRect.left + parent.scrollLeft}px`,
-      top: `${tableViewRect.top - containerRect.top + parent.scrollTop - COL_TOOL_HEIGHT - 5}px`
+      top: `${tableViewRect.top - containerRect.top + parent.scrollTop + this.quill.root.scrollTop - COL_TOOL_HEIGHT - 5}px`,
+      'margin-top': `${-this.quill.root.scrollTop}px`
+    })
+
+    if (this.quill.root === this.quill.scrollingContainer) {
+      this.quill.root.addEventListener('scroll', this.handleScroll);
+    }
+  }
+
+  handleScroll() {
+    css(this.domNode, {
+      'margin-top': `${-this.quill.root.scrollTop}px`
     })
   }
 
@@ -81,6 +94,7 @@ export default class TableColumnTool {
   }
 
   destroy () {
+    this.quill.root.removeEventListener('scroll', this.handleScroll)
     this.domNode.remove()
     return null
   }
