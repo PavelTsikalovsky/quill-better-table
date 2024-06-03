@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "d67b89b40e2a934c14a1";
+/******/ 	var hotCurrentHash = "9474597b991c827d970c";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2780,7 +2780,6 @@ class quill_better_table_BetterTable extends Module {
     // register customized Header，overwriting quill built-in Header
     // Quill.register('formats/header', Header, true);
   }
-
   constructor(quill, options) {
     super(quill, options);
 
@@ -2963,7 +2962,6 @@ quill_better_table_BetterTable.keyboardBindings = {
       if (range.length > 0) {
         this.quill.scroll.deleteAt(range.index, range.length); // So we do not trigger text-change
       }
-
       const lineFormats = Object.keys(context.format).reduce((formats, format) => {
         if (this.quill.scroll.query(format, Scope.BLOCK) && !Array.isArray(context.format[format])) {
           formats[format] = context.format[format];
@@ -3076,7 +3074,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1674655417700
+      // 1717402101810
       var cssReload = __webpack_require__(12)(module.i, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
