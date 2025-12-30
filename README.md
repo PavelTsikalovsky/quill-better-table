@@ -11,6 +11,8 @@ A module for better table in Quill, more useful features are supported. There is
   </li>
 </ul>
 
+
+
 # Features
 Clicking on tables in quill editor will initialize the tools for table, all features are based on it.
 
